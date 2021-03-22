@@ -1,0 +1,48 @@
+<html>
+<body>
+    <button id='logout-button'>Logout</button>
+    
+<h2>Animal List</h2>
+<ul id='animal-list'></ul>
+<script src="jquery-3.5.1.min.js"></script>
+<script>
+    function loadAnimals() {        
+        $.ajax({
+            url: "/api/animals",
+            dataType: "json",
+            method: "get",           
+            success: function(data) {
+                console.log(data)
+                let listContent = ""
+                data.forEach((a) => {
+                    listContent += `<li>${a.name}</li>`
+                })
+                $("#animal-list").html(listContent)
+            },
+            error: function(j,t,e) {
+                window.location.href='/'
+            }
+        })
+    }
+
+    function doLogout() {
+        $.ajax({
+            url: "/api/logout",
+            method: "post",
+            success: function(result) {
+                window.location.href = '/'
+            },
+            error: function(x, t, s) {
+                window.location.href = '/'
+            }
+        })
+        
+    }
+
+    $(function() {
+        loadAnimals()
+        $("#logout-button").on('click', doLogout);
+    })
+</script>
+</body>
+</html>
